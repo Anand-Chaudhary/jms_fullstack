@@ -45,6 +45,9 @@ export interface User extends Document{
     username: string,
     email: string,
     password: string,
+    phone: number,
+    address: string,
+    joinDate: Date,
     role: string,
     tasks: Task[],
 }
@@ -62,7 +65,19 @@ const UserSchema: Schema<User> = new Schema({
     },
     password:{
         type: String,
-        required: [true, "Password is required"],
+        required: [true, "Please enter your password"],
+    },
+    phone:{
+        type: Number,
+        required: [true, "Please enter your phone number"],
+    },
+    address:{
+        type: String,
+        required: [true, "Address is required"],
+    },
+    joinDate:{
+        type: Date,
+        required: [true, "Join Date is required"],
     },
     role:{
         type: String,
