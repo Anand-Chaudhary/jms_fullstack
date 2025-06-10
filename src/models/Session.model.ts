@@ -4,7 +4,7 @@ export interface School extends Document{
     name: string,
     address: string,
     dateOfSession: Date,
-    attendees: [],
+    volunteers: [],
     numberOfStudents: number,
     remarks?: string
 }
@@ -22,7 +22,7 @@ const SchoolSchema: Schema<School> = new Schema({
         type: Date,
         required: [true, "Date of session is required"],
     },
-    attendees:[
+    volunteers:[
         {
             type: mongoose.Types.ObjectId,
             ref: "Volunteer",

@@ -1,22 +1,22 @@
 import dbConnect from "@/lib/db";
-import UserModel from "@/models/User.model";
+import SessionModel from "@/models/Session.model";
 
 export async function GET() {
     await dbConnect();
 
     try {
-        const users = await UserModel.find({}, "-password"); // Exclude password field for security
+        const sessions = await SessionModel.find({}); // Exclude password field for security
 
         return Response.json({
             success: true,
-            users,
+            sessions,
         }, { status: 200 });
 
     } catch (error) {
         console.error("Error fetching users:", error);
         return Response.json({
             success: false,
-            message: "Failed to fetch users",
+            message: "Failed to fetch sessions",
         }, { status: 500 });
     }
 }

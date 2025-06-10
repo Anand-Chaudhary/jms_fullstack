@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db";
-import UserModel from "@/models/User.model";
+import UserModel, {Task} from "@/models/User.model";
 import mongoose from "mongoose";
 
 export async function POST(request: Request) {
@@ -22,11 +22,8 @@ export async function POST(request: Request) {
             }, { status: 405 })
         }
 
-        user.tasks.push({title, description, assignedTo: user._id as mongoose.Types.ObjectId})
-
-        await user.save();
-
-        // Save the updated user document
+        const newTask = {title, description, assignedTo: user._id as mongoose.Types.ObjectId}
+        user.tasks.push(newTask as Task)
         await user.save();
 
         return Response.json({
