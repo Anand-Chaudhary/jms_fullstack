@@ -4,6 +4,7 @@ export interface Task extends Document {
     title: string,
     description: string,
     dateAssigned: Date,
+    assignedTo: string,
     dateComplete: Date,
     category: string,
     state: string,
@@ -18,6 +19,10 @@ const TaskSchema: Schema<Task> = new Schema({
     description: {
         type: String,
         required: [true, "Description is required"],
+    },
+    assignedTo: {
+        type: String,
+        required: [true, "Assigning the task to someone is required"],
     },
     dateAssigned: {
         type: Date,
