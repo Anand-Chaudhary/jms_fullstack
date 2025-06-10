@@ -41,7 +41,7 @@ export interface User extends Document {
     username: string,
     email: string,
     password: string,
-    phone: number,
+    phone: string,
     address: string,
     joinDate: Date,
     role: string,
@@ -64,7 +64,7 @@ const UserSchema: Schema<User> = new Schema({
         required: [true, "Please enter your password"],
     },
     phone: {
-        type: Number,
+        type: String,
         required: [true, "Please enter your phone number"],
     },
     address: {
@@ -77,8 +77,9 @@ const UserSchema: Schema<User> = new Schema({
     },
     role: {
         type: String,
-        required: true,
-        default: "Employee"
+        required: [true, "Your role is required"],
+        enum: ["Admin", "Volunteer"],
+        default: "Volunteer"
     },
     tasks: [TaskSchema]
 })

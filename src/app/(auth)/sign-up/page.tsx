@@ -1,9 +1,178 @@
-import React from 'react'
+"use client"
 
-const signUp = () => {
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { signupSchema } from "@/schemas/signupSchema"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import logo from "@/app/public/circular.png"
+import Image from "next/image"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+const SignUp = () => {
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+      role: '',
+      phone: ''
+    }
+  });
+
+  const onSubmit = async () => {
+  
+  }
+
   return (
-    <div>signUp</div>
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <div className="w-full max-w-4xl flex gap-8 p-8">
+        {/* Form Section */}
+        <div
+          className="flex-1 rounded-2xl shadow-lg p-8"
+          style={{
+            background: "rgba(255, 255, 255, 0.85)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1px solid rgba(255, 255, 255, 0.18)"
+          }}
+        >
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
+            <p className="text-gray-600 mt-2">Change: Because We Can</p>
+          </div>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Username</FormLabel>
+                    <FormControl>
+                      <input
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your username"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Email</FormLabel>
+                    <FormControl>
+                      <input
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your email"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Password</FormLabel>
+                    <FormControl>
+                      <input
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Create a password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="role"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Role</FormLabel>
+                    <FormControl>
+                      <Select>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                          <SelectItem value="Volunteer">Volunteer</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Phone</FormLabel>
+                    <FormControl>
+                      <input
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+                type="submit"
+              >
+                Sign Up
+              </Button>
+            </form>
+          </Form>
+        </div>
+
+        {/* Logo Section */}
+        <div className="hidden lg:flex flex-1 items-center justify-center">
+          <div className="relative w-full max-w-md aspect-square">
+            <Image
+              src={logo}
+              alt="Kalpabriksha logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
-export default signUp
+export default SignUp
