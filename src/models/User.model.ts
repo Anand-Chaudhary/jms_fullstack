@@ -1,18 +1,16 @@
-import mongoose, {Schema, Document} from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface Task extends Document {
+export interface Task{
     title: string,
     description: string,
-    dateAssigned: Date,
-    assignedTo: string,
-    dateComplete: Date,
-    category: string,
-    state: string,
-    failed: boolean,
+    assignedTo: mongoose.Types.ObjectId,
+    dateAssigned?: Date,
+    state?: string,
+    failed?: boolean,
 }
 
 const TaskSchema: Schema<Task> = new Schema({
-    title:{
+    title: {
         type: String,
         required: [true, "Title is required"],
     },
@@ -21,24 +19,17 @@ const TaskSchema: Schema<Task> = new Schema({
         required: [true, "Description is required"],
     },
     assignedTo: {
-        type: String,
-        required: [true, "Assigning the task to someone is required"],
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     dateAssigned: {
         type: Date,
-        required: true,
-    },
-    dateComplete: {
-        type: Date,
-        required: true,
-    },
-    category: {
-        type: String,
-        required: true
+        default: Date.now(),
     },
     state: {
         type: String,
-        default: "Not started",
+        enum: ["Pending", "In Progress", "Completed"],
+        default: "Pending",
     },
     failed: {
         type: Boolean,
@@ -46,7 +37,7 @@ const TaskSchema: Schema<Task> = new Schema({
     },
 });
 
-export interface User extends Document{
+export interface User extends Document {
     username: string,
     email: string,
     password: string,
@@ -58,33 +49,33 @@ export interface User extends Document{
 }
 
 const UserSchema: Schema<User> = new Schema({
-    username:{
+    username: {
         type: String,
         required: [true, "Username is required"]
     },
-    email:{
+    email: {
         type: String,
         required: [true, "Please enter your email"],
         unique: true,
-        match: [/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/ , "Please use a valid email adress"]
+        match: [/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/, "Please use a valid email adress"]
     },
-    password:{
+    password: {
         type: String,
         required: [true, "Please enter your password"],
     },
-    phone:{
+    phone: {
         type: Number,
         required: [true, "Please enter your phone number"],
     },
-    address:{
+    address: {
         type: String,
         required: [true, "Address is required"],
     },
-    joinDate:{
+    joinDate: {
         type: Date,
         required: [true, "Join Date is required"],
     },
-    role:{
+    role: {
         type: String,
         required: true,
         default: "Employee"

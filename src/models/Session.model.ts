@@ -4,7 +4,7 @@ export interface School extends Document{
     name: string,
     address: string,
     dateOfSession: Date,
-    numberOfVolunteer: number,
+    attendees: [],
     numberOfStudents: number,
     remarks?: string
 }
@@ -22,15 +22,17 @@ const SchoolSchema: Schema<School> = new Schema({
         type: Date,
         required: [true, "Date of session is required"],
     },
-    numberOfVolunteer: {
-        type: Number,
-        required: [true, "Please specify the numbers of volunteer"],
-    },
+    attendees:[
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "Volunteer",
+        }
+    ],
     numberOfStudents: {
         type: Number,
         required: [true, "Please specify the numbers of students expected"],
     }
 })
 
-const SchoolModel = mongoose.models.School as mongoose.Model<School> || mongoose.model<School>("School", SchoolSchema)
-export default SchoolModel;
+const SessionModel = mongoose.models.School as mongoose.Model<School> || mongoose.model<School>("School", SchoolSchema)
+export default SessionModel;
