@@ -9,6 +9,5 @@ export const signupSchema = z.object({
     password: z.string().min(5, "Password must have 5 letters"),
     phone: z.string().min(10).max(10),
     address: z.string(),
-    joinDate: z.date(),
     role: z.string()
 })

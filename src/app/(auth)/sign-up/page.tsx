@@ -15,8 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import axios, { AxiosError } from "axios"
+import { useRouter } from "next/navigation"
 
 const SignUp = () => {
+  const router = useRouter()
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -24,12 +27,32 @@ const SignUp = () => {
       email: '',
       password: '',
       role: '',
-      phone: ''
+      phone: '',
+      address: '',
     }
   });
 
-  const onSubmit = async () => {
-  
+  const onSubmit = async (data: z.infer<typeof signupSchema>) => {
+    try {
+      const res = await axios.post(`/api/sign-up`, data);
+      if(res.data.success){
+        if(res.data?.user.role == "Admin"){
+          router.push('/dashboard/admin')
+        } else {
+          router.push('/dashboard/volunteer')
+        }
+      }
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      if (axiosError.response) {
+        // Handle specific error messages from the API
+        const errorMessage = (axiosError.response.data as { message?: string })?.message || 'An error occurred during sign up';
+        console.error('Sign up error:', errorMessage);
+        // You might want to show this error to the user using a toast or alert
+      } else {
+        console.error('Network error:', axiosError.message);
+      }
+    }
   }
 
   return (
@@ -111,11 +134,11 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="role"
-                render={() => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-medium text-gray-700">Role</FormLabel>
                     <FormControl>
-                      <Select>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Role" />
                         </SelectTrigger>
@@ -124,6 +147,24 @@ const SignUp = () => {
                           <SelectItem value="Volunteer">Volunteer</SelectItem>
                         </SelectContent>
                       </Select>
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Address</FormLabel>
+                    <FormControl>
+                      <input
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your address"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm" />
                   </FormItem>

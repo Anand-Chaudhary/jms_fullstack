@@ -73,7 +73,7 @@ const UserSchema: Schema<User> = new Schema({
     },
     joinDate: {
         type: Date,
-        required: [true, "Join Date is required"],
+        default: Date.now(),
     },
     role: {
         type: String,
