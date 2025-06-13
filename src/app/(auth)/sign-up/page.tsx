@@ -16,10 +16,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import axios, { AxiosError } from "axios"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
+import { useState } from "react"
 
 const SignUp = () => {
-  const router = useRouter()
+  // const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -33,32 +36,26 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof signupSchema>) => {
+    setLoading(true)
     try {
       const res = await axios.post(`/api/sign-up`, data);
-      if(res.data.success){
-        if(res.data?.user.role == "Admin"){
-          router.push('/dashboard/admin')
-        } else {
-          router.push('/dashboard/volunteer')
-        }
-      }
+      console.log(res.data);
     } catch (err) {
       const axiosError = err as AxiosError;
       if (axiosError.response) {
-        // Handle specific error messages from the API
         const errorMessage = (axiosError.response.data as { message?: string })?.message || 'An error occurred during sign up';
         console.error('Sign up error:', errorMessage);
-        // You might want to show this error to the user using a toast or alert
       } else {
         console.error('Network error:', axiosError.message);
       }
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center">
       <div className="w-full max-w-4xl flex gap-8 p-8">
-        {/* Form Section */}
         <div
           className="flex-1 rounded-2xl shadow-lg p-8"
           style={{
@@ -193,13 +190,16 @@ const SignUp = () => {
                 className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
                 type="submit"
               >
-                Sign Up
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                  </>
+                ) : "Signup"}
               </Button>
             </form>
           </Form>
         </div>
 
-        {/* Logo Section */}
         <div className="hidden lg:flex flex-1 items-center justify-center">
           <div className="relative w-full max-w-md aspect-square">
             <Image

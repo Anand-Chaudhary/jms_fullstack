@@ -6,8 +6,22 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from "next/link"
 import logo from "@/app/public/circular.png"
 import Image from "next/image"
+import { useForm } from "react-hook-form"
 
 export default function SignIn() {
+  type FormData = {
+    email: string
+    password: string
+  }
+
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>()
+
+  const onSubmit = (data: FormData) => {
+    // handle sign in logic here
+    // e.g., call API or authentication service
+    // console.log(data)
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
@@ -21,13 +35,22 @@ export default function SignIn() {
           <CardDescription>Access the Change Because We Can volunteer management portal</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <label htmlFor="email" className="text-sm font-medium">
                   Email
                 </label>
-                <Input id="email" type="email" placeholder="name@example.com" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  {...register("email", { required: "Email is required" })}
+                  aria-invalid={!!errors.email}
+                />
+                {errors.email && (
+                  <span className="text-xs text-red-600">{errors.email.message}</span>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center justify-between">
@@ -38,9 +61,23 @@ export default function SignIn() {
                     Forgot password?
                   </Link>
                 </div>
-                <Input id="password" type="password" />
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password", { required: "Password is required" })}
+                  aria-invalid={!!errors.password}
+                />
+                {errors.password && (
+                  <span className="text-xs text-red-600">{errors.password.message}</span>
+                )}
               </div>
-              <Button className="w-full bg-blue-700 hover:bg-blue-800">Sign In</Button>
+              <Button
+                className="w-full bg-blue-700 hover:bg-blue-800"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Signing In..." : "Sign In"}
+              </Button>
             </div>
           </form>
         </CardContent>
