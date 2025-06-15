@@ -1,98 +1,129 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import logo from "@/app/public/circular.png"
-import Image from "next/image"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import * as z from "zod"
+import { useRouter } from "next/navigation"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { toast } from 'sonner'
+import { signinSchema } from "@/schemas/signinSchema"
+import { signIn } from "next-auth/react"
+import logo from "@/app/public/circular.png"
+import Link from "next/link"
+import Image from "next/image"
 
-export default function SignIn() {
-  type FormData = {
-    email: string
-    password: string
-  }
+const Signin = () => {
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>()
+  const router = useRouter();
 
-  const onSubmit = (data: FormData) => {
-    // handle sign in logic here
-    // e.g., call API or authentication service
-    // console.log(data)
+  //zod implementation
+  const form = useForm<z.infer<typeof signinSchema>>({
+    resolver: zodResolver(signinSchema),
+    defaultValues: {
+      identifier: '',
+      password: ''
+    }
+  });
+
+  const onSubmit = async (data: z.infer<typeof signinSchema>) => {
+    const res = await signIn('credentials', {
+      redirect: false,
+      identifier: data.identifier,
+      password: data.password
+    })
+
+    if (res?.error) {
+      if (res.error == 'CredentialsSignin') {
+        toast.error("Incorrect Email or Password");
+      } else {
+        toast.error(res.error)
+      }
+    }
+
+    if (res?.url) {
+      // Get the session to check user role
+      const session = await fetch('/api/auth/session').then(res => res.json());
+      const userRole = session?.user?.role;
+
+      // Role-based routing
+      if (userRole === 'Admin') {
+        router.replace('/dashboard/admin');
+      } else if (userRole === 'Volunteer') {
+        router.replace('/dashboard/volunteer');
+      }
+    }
+
+    console.log(res);
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-              <Image src={logo} alt="Kalpabriksha" />
+    <>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        
+        <div className="w-full max-w-md flex flex-col justify-center items-center p-8 space-y-8 bg-white rounded-lg shadow-md">
+          <div className="h-12 top-0 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+              <Image src={logo} alt="Kalpabriksha Logo" />
             </div>
+          <div className="text-center">
+            <h1 className="text-4xl font font-extrabold tracking-tight lg:text-5xl mb-6">Welcome Back</h1>
+            <p className="mb-4">Enter your details</p>
           </div>
-          <CardTitle className="text-2xl">Sign In</CardTitle>
-          <CardDescription>Access the Change Because We Can volunteer management portal</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <label htmlFor="email" className="text-sm font-medium">
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  {...register("email", { required: "Email is required" })}
-                  aria-invalid={!!errors.email}
-                />
-                {errors.email && (
-                  <span className="text-xs text-red-600">{errors.email.message}</span>
+          <Form {...form}>
+            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+
+              <FormField
+                name="identifier"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="text-sm font-medium">
-                    Password
-                  </label>
-                  <Link href="#" className="text-sm text-blue-700 hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  {...register("password", { required: "Password is required" })}
-                  aria-invalid={!!errors.password}
-                />
-                {errors.password && (
-                  <span className="text-xs text-red-600">{errors.password.message}</span>
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
+              />
               <Button
-                className="w-full bg-blue-700 hover:bg-blue-800"
+                className="w-full bg-blue-500 hover:bg-blue-800 text-white"
                 type="submit"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? "Signing In..." : "Sign In"}
+                Sign-In
               </Button>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex flex-col gap-4 text-center">
-          <div className="text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link href="#" className="text-blue-700 hover:underline">
-              Contact your program coordinator
-            </Link>
-          </div>
-          <Link href="/" className="text-sm text-blue-700 hover:underline">
-            Return to homepage
-          </Link>
-        </CardFooter>
-      </Card>
-    </div>
-  )
-}
+              <div className="text-center">
+                <p className="text-sm">Dont have an account? <Link className="text-blue-700 hover:underline" href='/'>Contact program manager</Link></p>
+              <Link href="/" className="text-sm text-blue-700 hover:underline">
+                Return to homepage
+              </Link>
+              </div>
+            </form>
+          </Form>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Signin;

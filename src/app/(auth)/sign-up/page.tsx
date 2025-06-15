@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Button } from "@/components/ui/button"
 import logo from "@/app/public/circular.png"
 import Image from "next/image"
+import {toast} from 'sonner'
 import {
   Select,
   SelectContent,
@@ -39,9 +40,11 @@ const SignUp = () => {
     setLoading(true)
     try {
       const res = await axios.post(`/api/sign-up`, data);
+      toast.success("User Created")
       console.log(res.data);
     } catch (err) {
       const axiosError = err as AxiosError;
+      toast.error("User Creation Failed")
       if (axiosError.response) {
         const errorMessage = (axiosError.response.data as { message?: string })?.message || 'An error occurred during sign up';
         console.error('Sign up error:', errorMessage);
