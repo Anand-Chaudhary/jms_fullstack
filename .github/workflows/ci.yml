@@ -1,4 +1,4 @@
-name: Mystery Message CI
+name: VMS-Kalpabriksha
 
 on:
   push:
