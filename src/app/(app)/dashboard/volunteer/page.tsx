@@ -55,7 +55,7 @@ const Volunteer = () => {
                         {loading ? (
                             <p>Loading...</p>
                         ) : attendedSessions.length === 0 ? (
-                            <p className="text-gray-500">You haven't attended any sessions yet.</p>
+                            <p className="text-gray-500">You haven&apos;t attended any sessions yet.</p>
                         ) : (
                             <Table>
                                 <TableHeader>

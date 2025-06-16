@@ -1,24 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VMS Fullstack Application
 
-## Getting Started
+A modern, full-stack web application built with Next.js 15, React 19, and TypeScript, featuring a robust authentication system and MongoDB integration made for Kalpabriksha-Nepal
 
-First, run the development server:
+## 🚀 Features
+
+- **Modern Tech Stack**: Built with Next.js 15, React 19, and TypeScript
+- **Authentication**: Secure user authentication using NextAuth.js
+- **Database**: MongoDB integration with Mongoose ODM
+- **UI Components**: Beautiful UI components using Radix UI
+- **Form Handling**: Advanced form management with React Hook Form and Zod validation
+- **Styling**: Modern styling with Tailwind CSS
+- **Type Safety**: Full TypeScript support throughout the application
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Node.js (Latest LTS version recommended)
+- npm or yarn
+- MongoDB (local or Atlas instance)
+
+## 🛠️ Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Anand-Chaudhary/jms_fullstack.git
+cd jms_fullstack
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables:
+Create a `.env.local` file in the root directory with the following variables:
+```env
+MONGODB_URI=your_mongodb_connection_string
+NEXTAUTH_SECRET=your_nextauth_secret
+```
+
+## 🚀 Development
+
+To start the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/          # Next.js app directory (pages and layouts)
+├── components/   # Reusable UI components
+├── context/      # React context providers
+├── lib/          # Utility functions and configurations
+├── models/       # MongoDB models
+├── schemas/      # Zod validation schemas
+└── types/        # TypeScript type definitions
+```
+
+## 🛠️ Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests (when implemented)
+
+## 🔧 Tech Stack
+
+- **Frontend Framework**: Next.js 15
+- **UI Library**: React 19
+- **Language**: TypeScript
+- **Database**: MongoDB with Mongoose
+- **Authentication**: NextAuth.js
+- **UI Components**: Radix UI
+- **Form Management**: React Hook Form + Zod
+- **Styling**: Tailwind CSS
+- **Theme**: next-themes
+- **HTTP Client**: Axios
+- **Date Handling**: date-fns
+- **Notifications**: Sonner
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👥 Authors
+
+- Anand Chaudhary - Initial work
+
+## 🙏 Acknowledgments
+
+- Next.js team for the amazing framework
+- All contributors who have helped shape this project
+
+---
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Learn More
 

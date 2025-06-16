@@ -20,6 +20,7 @@ interface Session {
     name: string;
     address: string;
     dateOfSession: string;
+    //eslint-disable-next-line
     volunteers: any[];
 }
 
