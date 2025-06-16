@@ -1,8 +1,22 @@
+"use client"
+
+import SideBar from '@/components/general/sideBar'
+import TopBar from '@/components/general/topBar'
 import React from 'react'
 
 const Admin = () => {
   return (
-    <div>Admin</div>
+    <>
+      <div className="main flex">
+        <div className="navbar p-8 m-4 border-r-2 h-screen border-gray-100">
+          <SideBar />
+        </div>
+        <div className="dashboard">
+          <TopBar />
+          <p className='text-2xl font-semibold p-4'>Assign tasks to the volunteers: </p>
+        </div>
+      </div>
+    </>
   )
 }
 

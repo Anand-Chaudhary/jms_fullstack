@@ -17,7 +17,7 @@ export default function LandingPage() {
       {/* Navbar */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="https://www.kalpabrikshanepal.org.np/" className="flex items-center gap-2">
             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
               <Image src={logo} alt="Kalpabriksha"/>
             </div>
