@@ -13,7 +13,7 @@ const Volunteer = () => {
         </div>
         <div className="dashboard">
           <TopBar />
-          <p className='text-2xl font-semibold p-4'>See your tasks for today</p>
+          <p className='text-2xl font-semibold p-4'>See the sessions you attended: </p>
         </div>
       </div>
     </>

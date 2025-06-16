@@ -13,7 +13,7 @@ const Admin = () => {
         </div>
         <div className="dashboard">
           <TopBar />
-          <p className='text-2xl font-semibold p-4'>Assign tasks to the volunteers: </p>
+          <p className='text-2xl font-semibold p-4'>Mark attandence of volunteers: </p>
         </div>
       </div>
     </>

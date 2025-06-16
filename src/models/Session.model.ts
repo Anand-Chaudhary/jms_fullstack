@@ -5,7 +5,6 @@ export interface School extends Document{
     address: string,
     dateOfSession: Date,
     volunteers: [],
-    numberOfStudents: number,
     remarks?: string
 }
 
@@ -27,12 +26,13 @@ const SchoolSchema: Schema<School> = new Schema({
             type: mongoose.Types.ObjectId,
             ref: "Volunteer",
         }
-    ],
-    numberOfStudents: {
-        type: Number,
-        required: [true, "Please specify the numbers of students expected"],
-    }
+    ]
+}, {
+    timestamps: true
 })
 
-const SessionModel = mongoose.models.School as mongoose.Model<School> || mongoose.model<School>("School", SchoolSchema)
+// Delete the model if it exists to prevent the OverwriteModelError
+mongoose.deleteModel("School");
+
+const SessionModel = mongoose.model<School>("School", SchoolSchema)
 export default SessionModel;
