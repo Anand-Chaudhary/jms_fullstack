@@ -20,6 +20,7 @@ interface Session {
     name: string;
     address: string;
     dateOfSession: string;
+    volunteers: any[];
 }
 
 type SchoolFormData = z.infer<typeof SchoolSchema>;
@@ -88,7 +89,7 @@ const Sessions = () => {
             <div className="navbar p-8 m-4 border-r-2 h-screen border-gray-100">
                 <SideBar />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 p-8 m-4">
                 <h1 className="text-3xl m-2 p-2 font-bold mb-6">Sessions</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {session?.user?.role === 'Admin' && (
@@ -187,6 +188,10 @@ const Sessions = () => {
                                 <p className="flex items-center gap-2">
                                     <span className="font-medium">Date:</span>
                                     {new Date(session.dateOfSession).toLocaleDateString()}
+                                </p>
+                                <p className="flex items-center gap-2">
+                                    <span className="font-medium">Volunteers:</span>
+                                    {session.volunteers ? session.volunteers.length : 0}
                                 </p>
                             </div>
                         </div>

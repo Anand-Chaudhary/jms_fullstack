@@ -1,42 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface Task{
-    title: string,
-    description: string,
-    assignedTo: mongoose.Types.ObjectId,
-    dateAssigned?: Date,
-    state?: string,
-    failed?: boolean,
-}
-
-const TaskSchema: Schema<Task> = new Schema({
-    title: {
-        type: String,
-        required: [true, "Title is required"],
-    },
-    description: {
-        type: String,
-        required: [true, "Description is required"],
-    },
-    assignedTo: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    dateAssigned: {
-        type: Date,
-        default: Date.now(),
-    },
-    state: {
-        type: String,
-        enum: ["Pending", "In Progress", "Completed"],
-        default: "Pending",
-    },
-    failed: {
-        type: Boolean,
-        default: false,
-    },
-});
-
 export interface User extends Document {
     username: string,
     email: string,
@@ -45,7 +8,8 @@ export interface User extends Document {
     address: string,
     joinDate: Date,
     role: string,
-    tasks: Task[],
+    isAvailable: boolean,
+    attended: mongoose.Types.ObjectId[]
 }
 
 const UserSchema: Schema<User> = new Schema({
@@ -81,7 +45,14 @@ const UserSchema: Schema<User> = new Schema({
         enum: ["Admin", "Volunteer"],
         default: "Volunteer"
     },
-    tasks: [TaskSchema]
+    isAvailable: {
+        type: Boolean,
+        default: true
+    },
+    attended: [{
+        type: mongoose.Types.ObjectId,
+        ref: "School"
+    }]
 })
 
 const UserModel = mongoose.models.User as mongoose.Model<User> || mongoose.model<User>("User", UserSchema)

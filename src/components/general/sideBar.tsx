@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 
 const SideBar = () => {
     const router = useRouter();
-    const sideBarItems = ["Home", "Session", "Volunteers", "Profile"]
+    const sideBarItems = ["Dashboard", "Sessions", "Volunteers", "Profile"]
     
     const handleLogOut = async () => {
         await signOut({ 
@@ -30,7 +30,8 @@ const SideBar = () => {
                 </Link>
                 {
                     sideBarItems.map((items, ellem) => (
-                        <Button className='bg-transparent text-black outline-none gap-4 border-2 border-blue-200 w-full rounded-full hover:bg-blue-200 m-2' key={ellem}>
+                        <Button onClick={() => router.replace(`/${items.toLowerCase()}`)}
+                        className='bg-transparent text-black outline-none gap-4 border-2 border-blue-200 w-full rounded-full hover:bg-blue-200 m-2' key={ellem}>
                             {items}
                         </Button>
                     ))
