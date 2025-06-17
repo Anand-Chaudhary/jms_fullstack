@@ -69,6 +69,8 @@ const Signin = () => {
         }
       }
     } catch (error) {
+      console.log("Error: ", error);
+      
       toast.error("Something went wrong", {
         description: "Please try again later"
       });

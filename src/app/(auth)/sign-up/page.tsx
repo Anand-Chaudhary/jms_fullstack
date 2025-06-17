@@ -39,6 +39,7 @@ const SignUp = () => {
   const onSubmit = async (data: z.infer<typeof signupSchema>) => {
     setLoading(true)
     try {
+      //eslint-disable-next-line
       const res = await axios.post(`/api/sign-up`, data);
       toast.success("Account created successfully!", {
         description: "You can now sign in with your credentials"

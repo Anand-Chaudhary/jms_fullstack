@@ -23,6 +23,8 @@ const SideBar = () => {
             });
             router.push('/sign-in');
         } catch (error) {
+            console.log(error);
+            
             toast.error("Logout failed", {
                 description: "Please try again"
             });
