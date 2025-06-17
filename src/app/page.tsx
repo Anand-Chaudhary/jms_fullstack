@@ -2,9 +2,12 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Mail, Phone, ExternalLink, LogIn } from "lucide-react"
+import { Mail, ExternalLink, LogIn } from "lucide-react"
 import Image from "next/image"
 import logo from '../app/public/circular.png'
+import director from '../app/public/abhinab.png'
+import heartland from '../app/public/heartland.jpg'
+import president from '../app/public/nitam.png'
 
 export default function LandingPage() {
   return (
@@ -31,7 +34,9 @@ export default function LandingPage() {
                 Sign In
               </Button>
             </Link>
-            <Button className="bg-blue-700 hover:bg-blue-800 text-white">Get Involved</Button>
+            <Link href='https://www.kalpabrikshanepal.org.np/cbwc'>
+            <Button className="bg-blue-700 hover:bg-blue-800 text-white">Read More</Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -39,46 +44,47 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section id="about" className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="flex gap-14 m-4 items-center justify-between">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
-                Kalpabriksha: Nurturing Communities, Growing Futures
+                Kalpabriksha-Nepal: Kalpabrikshing with kalpabriksha
               </h1>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Kalpabriksha is a community-focused non-profit organization dedicated to sustainable development and
-                empowerment in Nepal. We work directly with local communities to address their unique challenges and
-                create lasting positive change.
+                Kalpabriksha is a Nepalese NGO that supports youth through traditional and experimental initiatives, promoting emotional, intellectual, and social growth, equity, inclusion, and youth innovation, aiming to make a difference.
               </p>
               <div className="space-y-4 text-gray-600">
                 <div className="flex items-start gap-2">
                   <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mt-1">
                     <div className="h-2 w-2 rounded-full bg-blue-700"></div>
                   </div>
-                  <p>Established in 2013, serving over 25 communities across Nepal</p>
+                  <p>Established in 2022, serving over 4 districts across Nepal</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mt-1">
                     <div className="h-2 w-2 rounded-full bg-blue-700"></div>
                   </div>
-                  <p>Focus on education, sustainable agriculture, and community health</p>
+                  <p>Partnering with schools and community groups for safe, inclusive environments</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mt-1">
                     <div className="h-2 w-2 rounded-full bg-blue-700"></div>
                   </div>
-                  <p>Locally-led initiatives with global support and partnerships</p>
+                  <p>Developing holistic educational programs for personal/professional growth</p>
                 </div>
               </div>
             </div>
             <div className="relative">
               <Image
-                src="/placeholder.svg"
-                height={500}
-                width={600}
+                src={president}
+                height={450}
+                width={650}
                 alt="Kalpabriksha community work"
-                className="w-full h-auto rounded-lg shadow-md"
+                className="rounded-lg shadow-md"
               />
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-100 rounded-lg -z-10"></div>
+              <div className="mt-4 text-sm text-gray-500 italic">
+                President-Kalpabriksha Nepal
+              </div>
             </div>
           </div>
         </div>
@@ -91,8 +97,7 @@ export default function LandingPage() {
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-800">Change: Because We Can</h2>
             <div className="h-1 w-24 bg-blue-700 mx-auto mb-8"></div>
             <p className="text-lg text-gray-600 text-center">
-              Our flagship program focused on empowering rural communities through education, sustainable practices, and
-              collaborative development.
+              Is a program specially targeted towards students of grades 7 to Bachelors level. Via interactive and effective learning methods, this program aims to teach students the concept of consent, reproductive rights, wrongs, and shed light on sensitive topics such as harassment, abuse, and rape.
             </p>
           </div>
 
@@ -100,28 +105,26 @@ export default function LandingPage() {
             <div className="order-2 md:order-1">
               <h3 className="text-xl font-semibold mb-4 text-gray-800">Program Overview</h3>
               <p className="text-gray-600 mb-6">
-                &quot;Change: Because We Can&quot; is a holistic community development initiative that works with local leaders to
-                identify needs and implement sustainable solutions. The program focuses on three key areas: education
-                access, environmental sustainability, and economic empowerment.
+                We tailor our content as per our audience. Our mentors are professionals involved in the fields of Law, Psychology, and Activism. Through proper training and interaction, we aim to prevent harassment and abuse among students.
               </p>
 
               <h3 className="text-xl font-semibold mb-4 text-gray-800">Program Impact</h3>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="text-2xl font-bold text-blue-700">500+</div>
-                  <div className="text-sm text-gray-600">Families Supported</div>
+                  <div className="text-2xl font-bold text-blue-700">40+</div>
+                  <div className="text-sm text-gray-600">Volunteers</div>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="text-2xl font-bold text-blue-700">15</div>
-                  <div className="text-sm text-gray-600">Communities Engaged</div>
+                  <div className="text-2xl font-bold text-blue-700">12+</div>
+                  <div className="text-sm text-gray-600">Schools</div>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="text-2xl font-bold text-blue-700">8</div>
-                  <div className="text-sm text-gray-600">Schools Improved</div>
+                  <div className="text-2xl font-bold text-blue-700">4</div>
+                  <div className="text-sm text-gray-600">Districts</div>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="text-2xl font-bold text-blue-700">200+</div>
-                  <div className="text-sm text-gray-600">Volunteers Trained</div>
+                  <div className="text-2xl font-bold text-blue-700">2000+</div>
+                  <div className="text-sm text-gray-600">Students Trained</div>
                 </div>
               </div>
 
@@ -129,15 +132,15 @@ export default function LandingPage() {
                 <h4 className="font-semibold text-gray-800 mb-2">Program Director</h4>
                 <div className="flex items-center gap-4">
                   <Image
-                    src="/placeholder.svg"
+                    src={director}
                     height={80}
                     width={80}
                     alt="Program Director"
                     className="h-16 w-16 rounded-full object-cover"
                   />
                   <div>
-                    <div className="font-medium text-gray-800">Aarav Sharma</div>
-                    <div className="text-sm text-gray-600">Director, Change Program</div>
+                    <div className="font-medium text-gray-800">Abhinab Khanal</div>
+                    <div className="text-sm text-gray-600">Director, Change Because We Can</div>
                   </div>
                 </div>
               </div>
@@ -146,25 +149,21 @@ export default function LandingPage() {
                 <h4 className="font-semibold text-gray-800">Contact Information</h4>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Mail className="h-4 w-4 text-blue-700" />
-                  <span>change@kalpabrikshanepal.org.np</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Phone className="h-4 w-4 text-blue-700" />
-                  <span>+977 1 4123456</span>
+                  <span>director.cbwc@kalpabriksha.org</span>
                 </div>
               </div>
             </div>
 
             <div className="order-1 md:order-2">
               <Image
-                src="/placeholder.svg"
+                src={heartland}
                 height={500}
                 width={600}
                 alt="Change program in action"
                 className="w-full h-auto rounded-lg shadow-md"
               />
               <div className="mt-4 text-sm text-gray-500 italic">
-                Community members participating in our sustainable agriculture workshop in Kavre district.
+                Change Because We Can - Heartland Academy
               </div>
             </div>
           </div>
@@ -182,7 +181,9 @@ export default function LandingPage() {
                   opportunities within the program.
                 </p>
                 <div className="mt-4">
+                  <Link href=''>
                   <Button className="bg-blue-700 hover:bg-blue-800 text-white">Access Google Form</Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -196,7 +197,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="font-semibold text-blue-700 text-sm">K</span>
+              <Image src={logo} alt="Kalpabriksha"/>
               </div>
               <span className="font-semibold text-gray-800">Kalpabriksha Nepal</span>
             </div>
