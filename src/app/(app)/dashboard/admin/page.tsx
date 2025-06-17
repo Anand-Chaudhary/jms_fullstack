@@ -43,6 +43,7 @@ interface Volunteer {
     username: string;
     email: string;
     role: string;
+    isAvailable: boolean;
 }
 
 const Admin = () => {
@@ -113,9 +114,9 @@ const Admin = () => {
     };
 
     const isVolunteerPresent = (volunteerId: string) => {
-        if (!selectedSession) return false;
+        if (!selectedSession?.volunteers) return false;
         const volunteer = selectedSession.volunteers.find(
-            vol => vol.volunteer._id === volunteerId
+            vol => vol.volunteer?._id === volunteerId
         );
         return volunteer?.isPresent || false;
     };
@@ -133,12 +134,20 @@ const Admin = () => {
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {sessions.map((session) => (
-                                <Dialog key={session._id}>
+                                <Dialog 
+                                    key={session._id}
+                                    onOpenChange={(open) => {
+                                        if (open) {
+                                            setSelectedSession(session);
+                                        } else {
+                                            setSelectedSession(null);
+                                        }
+                                    }}
+                                >
                                     <DialogTrigger asChild>
                                         <Button
                                             variant="outline"
                                             className="h-auto p-4 flex flex-col items-start gap-2"
-                                            onClick={() => setSelectedSession(session)}
                                         >
                                             <div className="flex items-center gap-2">
                                                 <SchoolIcon className="h-4 w-4" />
@@ -160,6 +169,7 @@ const Admin = () => {
                                                     <TableRow>
                                                         <TableHead>Volunteer</TableHead>
                                                         <TableHead>Email</TableHead>
+                                                        <TableHead className="text-center">Status</TableHead>
                                                         <TableHead className="text-right">Present</TableHead>
                                                     </TableRow>
                                                 </TableHeader>
@@ -168,6 +178,15 @@ const Admin = () => {
                                                         <TableRow key={volunteer._id}>
                                                             <TableCell>{volunteer.username}</TableCell>
                                                             <TableCell>{volunteer.email}</TableCell>
+                                                            <TableCell className="text-center">
+                                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                                                    volunteer.isAvailable 
+                                                                        ? 'bg-green-100 text-green-800' 
+                                                                        : 'bg-red-100 text-red-800'
+                                                                }`}>
+                                                                    {volunteer.isAvailable ? 'Available' : 'Unavailable'}
+                                                                </span>
+                                                            </TableCell>
                                                             <TableCell className="text-right">
                                                                 <Checkbox
                                                                     checked={isVolunteerPresent(volunteer._id)}
@@ -177,7 +196,7 @@ const Admin = () => {
                                                                             checked as boolean
                                                                         )
                                                                     }
-                                                                    disabled={loading}
+                                                                    disabled={loading || !volunteer.isAvailable}
                                                                 />
                                                             </TableCell>
                                                         </TableRow>
