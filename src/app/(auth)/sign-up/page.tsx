@@ -17,12 +17,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import axios, { AxiosError } from "axios"
-// import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 const SignUp = () => {
-  // const router = useRouter()
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -40,16 +40,27 @@ const SignUp = () => {
     setLoading(true)
     try {
       const res = await axios.post(`/api/sign-up`, data);
-      toast.success("User Created")
-      console.log(res.data);
+      toast.success("Account created successfully!", {
+        description: "You can now sign in with your credentials"
+      });
+      router.push('/sign-in');
     } catch (err) {
       const axiosError = err as AxiosError;
-      toast.error("User Creation Failed")
       if (axiosError.response) {
-        const errorMessage = (axiosError.response.data as { message?: string })?.message || 'An error occurred during sign up';
-        console.error('Sign up error:', errorMessage);
+        const errorMessage = (axiosError.response.data as { message?: string })?.message;
+        if (errorMessage?.includes("already exists")) {
+          toast.error("Email already registered", {
+            description: "Please use a different email address or sign in"
+          });
+        } else {
+          toast.error("Registration failed", {
+            description: errorMessage || "Please check your information and try again"
+          });
+        }
       } else {
-        console.error('Network error:', axiosError.message);
+        toast.error("Network error", {
+          description: "Please check your internet connection and try again"
+        });
       }
     } finally {
       setLoading(false)

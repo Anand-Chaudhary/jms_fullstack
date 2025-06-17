@@ -11,6 +11,7 @@ export async function middleware(request: NextRequest) {
     const isVolunteer = token?.role === "Volunteer"
     const isAdminRoute = url.pathname.startsWith("/dashboard/admin")
     const isVolunteerRoute = url.pathname.startsWith("/dashboard/volunteer")
+    const isDashboardRoot = url.pathname === "/dashboard"
 
     // Public paths that don't require authentication
     const isPublicPath = url.pathname === '/sign-in' || url.pathname === '/sign-up'
@@ -22,6 +23,15 @@ export async function middleware(request: NextRequest) {
 
     // If user is logged in and tries to access auth pages, redirect to appropriate dashboard
     if (token && isPublicPath) {
+        if (isAdmin) {
+            return NextResponse.redirect(new URL('/dashboard/admin', request.url))
+        } else if (isVolunteer) {
+            return NextResponse.redirect(new URL('/dashboard/volunteer', request.url))
+        }
+    }
+
+    // Handle root dashboard route redirection
+    if (isDashboardRoot && token) {
         if (isAdmin) {
             return NextResponse.redirect(new URL('/dashboard/admin', request.url))
         } else if (isVolunteer) {
@@ -46,6 +56,7 @@ export const config = {
     matcher: [
         '/sign-in',
         '/sign-up',
+        '/dashboard',
         '/dashboard/:path*',
     ]
 }

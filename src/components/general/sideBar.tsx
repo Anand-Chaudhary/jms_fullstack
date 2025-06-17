@@ -7,16 +7,26 @@ import Image from 'next/image'
 import logo from '@/app/public/circular.png'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const SideBar = () => {
     const router = useRouter();
     const sideBarItems = ["Dashboard", "Sessions", "Volunteers", "Profile"]
     
     const handleLogOut = async () => {
-        await signOut({ 
-            redirect: false 
-        });
-        router.push('/sign-in');
+        try {
+            await signOut({ 
+                redirect: false 
+            });
+            toast.success("Logged out successfully", {
+                description: "Thank you for using our platform"
+            });
+            router.push('/sign-in');
+        } catch (error) {
+            toast.error("Logout failed", {
+                description: "Please try again"
+            });
+        }
     }
 
     return (

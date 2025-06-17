@@ -13,10 +13,13 @@ import { signIn } from "next-auth/react"
 import logo from "@/app/public/circular.png"
 import Link from "next/link"
 import Image from "next/image"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 const Signin = () => {
 
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   //zod implementation
   const form = useForm<z.infer<typeof signinSchema>>({
@@ -28,34 +31,50 @@ const Signin = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof signinSchema>) => {
-    const res = await signIn('credentials', {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password
-    })
+    setLoading(true);
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        identifier: data.identifier,
+        password: data.password
+      });
 
-    if (res?.error) {
-      if (res.error == 'CredentialsSignin') {
-        toast.error("Incorrect Email or Password");
-      } else {
-        toast.error(res.error)
+      if (res?.error) {
+        if (res.error === 'CredentialsSignin') {
+          toast.error("Invalid credentials", {
+            description: "Please check your email and password"
+          });
+        } else {
+          toast.error("Authentication failed", {
+            description: res.error
+          });
+        }
+        return;
       }
-    }
 
-    if (res?.url) {
-      // Get the session to check user role
-      const session = await fetch('/api/auth/session').then(res => res.json());
-      const userRole = session?.user?.role;
+      if (res?.url) {
+        toast.success("Welcome back!", {
+          description: "Successfully signed in"
+        });
+        
+        // Get the session to check user role
+        const session = await fetch('/api/auth/session').then(res => res.json());
+        const userRole = session?.user?.role;
 
-      // Role-based routing
-      if (userRole === 'Admin') {
-        router.replace('/dashboard/admin');
-      } else if (userRole === 'Volunteer') {
-        router.replace('/dashboard/volunteer');
+        // Role-based routing
+        if (userRole === 'Admin') {
+          router.replace('/dashboard/admin');
+        } else if (userRole === 'Volunteer') {
+          router.replace('/dashboard/volunteer');
+        }
       }
+    } catch (error) {
+      toast.error("Something went wrong", {
+        description: "Please try again later"
+      });
+    } finally {
+      setLoading(false);
     }
-
-    console.log(res);
   }
 
   return (
@@ -109,8 +128,16 @@ const Signin = () => {
               <Button
                 className="w-full bg-blue-500 hover:bg-blue-800 text-white"
                 type="submit"
+                disabled={loading}
               >
-                Sign-In
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
               <div className="text-center">
                 <p className="text-sm">Dont have an account? <Link className="text-blue-700 hover:underline" href='/'>Contact program manager</Link></p>
