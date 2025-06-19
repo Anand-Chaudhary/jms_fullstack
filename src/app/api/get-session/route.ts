@@ -5,7 +5,11 @@ export async function GET() {
     await dbConnect();
 
     try {
-        const sessions = await SessionModel.find({}); // Exclude password field for security
+        const sessions = await SessionModel.find({})
+            .populate({
+                path: 'volunteers.volunteer',
+                select: 'username email phone address role',
+            });
 
         return Response.json({
             success: true,

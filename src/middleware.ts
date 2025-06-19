@@ -48,6 +48,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/dashboard/admin', request.url))
     }
 
+    // Only allow Admins to access /volunteers and its subroutes
+    const isVolunteersRoute = url.pathname.startsWith('/volunteers');
+    if (isVolunteersRoute && !isAdmin) {
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
     return NextResponse.next()
 }
 
@@ -58,6 +64,12 @@ export const config = {
         '/sign-up',
         '/dashboard',
         '/dashboard/:path*',
+        '/sessions',
+        '/sessions/:path*',
+        '/volunteers',
+        '/volunteers/:path*',
+        '/profile',
+        '/profile/:path*',
     ]
 }
 
@@ -68,6 +80,7 @@ export default withAuth(
         const isVolunteer = token?.role === "Volunteer"
         const isAdminRoute = req.nextUrl.pathname.startsWith("/dashboard/admin")
         const isVolunteerRoute = req.nextUrl.pathname.startsWith("/dashboard/volunteer")
+        const isVolunteersRoute = req.nextUrl.pathname.startsWith('/volunteers');
 
         // Redirect if trying to access admin routes without admin role
         if (isAdminRoute && !isAdmin) {
@@ -77,6 +90,11 @@ export default withAuth(
         // Redirect if trying to access volunteer routes without volunteer role
         if (isVolunteerRoute && !isVolunteer) {
             return NextResponse.redirect(new URL("/dashboard/admin", req.url))
+        }
+
+        // Only allow Admins to access /volunteers and its subroutes
+        if (isVolunteersRoute && !isAdmin) {
+            return NextResponse.redirect(new URL('/dashboard', req.url));
         }
 
         return NextResponse.next()

@@ -30,7 +30,10 @@ const Sessions = () => {
     const { data: session } = useSession();
     const [sessions, setSessions] = useState<Session[]>([]);
     const [loading, setLoading] = useState(true);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isAddSessionOpen, setIsAddSessionOpen] = useState(false);
+    const [isSessionDetailsOpen, setIsSessionDetailsOpen] = useState(false);
+    const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     const form = useForm<SchoolFormData>({
         resolver: zodResolver(SchoolSchema),
@@ -41,6 +44,24 @@ const Sessions = () => {
             numberOfVolunteer: 0
         }
     });
+
+    const editForm = useForm<{ name: string; address: string; dateOfSession: string }>({
+        defaultValues: {
+            name: '',
+            address: '',
+            dateOfSession: '',
+        }
+    });
+
+    useEffect(() => {
+        if (selectedSession) {
+            editForm.reset({
+                name: selectedSession.name,
+                address: selectedSession.address,
+                dateOfSession: selectedSession.dateOfSession.split('T')[0],
+            });
+        }
+    }, [selectedSession]);
 
     useEffect(() => {
         const fetchSessions = async () => {
@@ -66,7 +87,7 @@ const Sessions = () => {
             });
             if (response.data.success) {
                 toast.success('Session added successfully');
-                setIsOpen(false);
+                setIsAddSessionOpen(false);
                 form.reset();
                 const updatedSessions = await axios.get('/api/get-session');
                 setSessions(updatedSessions.data.sessions);
@@ -74,6 +95,33 @@ const Sessions = () => {
         } catch (error) {
             console.error('Error adding session:', error);
             toast.error('Failed to add session');
+        }
+    };
+
+    const handleSessionClick = (session: Session) => {
+        setSelectedSession(session);
+        setIsSessionDetailsOpen(true);
+    };
+
+    const handleEditSave = async (data: { name: string; address: string; dateOfSession: string }) => {
+        if (!selectedSession) return;
+        try {
+            const response = await axios.patch('/api/sessions', {
+                id: selectedSession._id,
+                name: data.name,
+                address: data.address,
+                dateOfSession: data.dateOfSession,
+            });
+            if (response.data.success) {
+                toast.success('Session updated successfully');
+                setSelectedSession({ ...selectedSession, ...data });
+                setIsEditing(false);
+                setSessions((prev) => prev.map(s => s._id === selectedSession._id ? { ...s, ...data } : s));
+            } else {
+                toast.error('Failed to update session');
+            }
+        } catch (error) {
+            toast.error('Failed to update session');
         }
     };
 
@@ -94,7 +142,7 @@ const Sessions = () => {
                 <h1 className="text-2xl md:text-3xl m-2 p-2 font-bold mb-4 md:mb-6">Sessions</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     {session?.user?.role === 'Admin' && (
-                        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                        <Dialog open={isAddSessionOpen} onOpenChange={setIsAddSessionOpen}>
                             <DialogTrigger asChild>
                                 <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer flex flex-col items-center justify-center h-[200px]">
                                     <Plus className="h-12 w-12 text-blue-500 mb-2" />
@@ -175,24 +223,25 @@ const Sessions = () => {
                             </DialogContent>
                         </Dialog>
                     )}
-                    {sessions.map((session) => (
+                    {sessions.map((s) => (
                         <div
-                            key={session._id}
-                            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow"
+                            key={s._id}
+                            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer"
+                            onClick={() => session?.user?.role === 'Admin' ? handleSessionClick(s) : null}
                         >
-                            <h2 className="text-xl font-semibold mb-2">{session.name}</h2>
+                            <h2 className="text-xl font-semibold mb-2">{s.name}</h2>
                             <div className="space-y-2 text-gray-600">
                                 <p className="flex items-center gap-2">
                                     <span className="font-medium">Address:</span>
-                                    {session.address}
+                                    {s.address}
                                 </p>
                                 <p className="flex items-center gap-2">
                                     <span className="font-medium">Date:</span>
-                                    {new Date(session.dateOfSession).toLocaleDateString()}
+                                    {new Date(s.dateOfSession).toLocaleDateString()}
                                 </p>
                                 <p className="flex items-center gap-2">
                                     <span className="font-medium">Volunteers:</span>
-                                    {session.volunteers ? session.volunteers.length : 0}
+                                    {s.volunteers ? s.volunteers.length : 0}
                                 </p>
                             </div>
                         </div>
@@ -202,6 +251,60 @@ const Sessions = () => {
                     <div className="text-center text-gray-500 mt-8">
                         No sessions found
                     </div>
+                )}
+                {session?.user?.role === 'Admin' && selectedSession && (
+                    <Dialog open={isSessionDetailsOpen} onOpenChange={(open) => { setIsSessionDetailsOpen(open); setIsEditing(false); }}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Session Details</DialogTitle>
+                            </DialogHeader>
+                            {isEditing ? (
+                                <form onSubmit={editForm.handleSubmit(handleEditSave)} className="space-y-4">
+                                    <div>
+                                        <label className="block font-medium mb-1">School Name</label>
+                                        <input className="w-full border rounded px-2 py-1" {...editForm.register('name', { required: true })} />
+                                    </div>
+                                    <div>
+                                        <label className="block font-medium mb-1">Address</label>
+                                        <input className="w-full border rounded px-2 py-1" {...editForm.register('address', { required: true })} />
+                                    </div>
+                                    <div>
+                                        <label className="block font-medium mb-1">Date</label>
+                                        <input type="date" className="w-full border rounded px-2 py-1" {...editForm.register('dateOfSession', { required: true })} />
+                                    </div>
+                                    <div className="flex gap-2 justify-end">
+                                        <Button type="button" variant="secondary" onClick={() => setIsEditing(false)}>Cancel</Button>
+                                        <Button type="submit" className="bg-blue-500 hover:bg-blue-700">Save</Button>
+                                    </div>
+                                </form>
+                            ) : (
+                                <>
+                                    <div className="mb-4">
+                                        <p><strong>School Name:</strong> {selectedSession.name}</p>
+                                        <p><strong>Address:</strong> {selectedSession.address}</p>
+                                        <p><strong>Date:</strong> {new Date(selectedSession.dateOfSession).toLocaleDateString()}</p>
+                                    </div>
+                                    <Button className="mb-4" onClick={() => setIsEditing(true)}>Edit</Button>
+                                    <div>
+                                        <h3 className="font-semibold mb-2">Volunteers Attended</h3>
+                                        <ul className="list-disc pl-5">
+                                            {selectedSession.volunteers && selectedSession.volunteers.filter(v => v.isPresent && v.volunteer).length > 0 ? (
+                                                selectedSession.volunteers
+                                                    .filter(v => v.isPresent && v.volunteer)
+                                                    .map((v, idx) => (
+                                                        <li key={idx}>
+                                                            <span>{v.volunteer.username} ({v.volunteer.email})</span>
+                                                        </li>
+                                                    ))
+                                            ) : (
+                                                <li>No volunteers attended.</li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                        </DialogContent>
+                    </Dialog>
                 )}
             </div>
         </div>

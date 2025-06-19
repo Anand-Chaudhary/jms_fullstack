@@ -3,6 +3,7 @@ import dbConnect from "@/lib/db";
 import SessionModel from "@/models/Session.model";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
+import { Types } from "mongoose";
 
 export async function GET() {
     try {
@@ -24,6 +25,42 @@ export async function GET() {
 
     } catch (error) {
         console.error("Error fetching sessions:", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}
+
+export async function PATCH(request: Request) {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session || session.user.role !== 'Admin') {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        await dbConnect();
+        const body = await request.json();
+        const { id, name, address, dateOfSession } = body;
+        if (!id) {
+            return NextResponse.json({ error: "Session ID is required" }, { status: 400 });
+        }
+
+        const updated = await SessionModel.findByIdAndUpdate(
+            id,
+            {
+                ...(name && { name }),
+                ...(address && { address }),
+                ...(dateOfSession && { dateOfSession }),
+            },
+            { new: true }
+        );
+        if (!updated) {
+            return NextResponse.json({ error: "Session not found" }, { status: 404 });
+        }
+        return NextResponse.json({ success: true, session: updated });
+    } catch (error) {
+        console.error("Error updating session:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

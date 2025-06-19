@@ -5,15 +5,20 @@ import { Button } from '../ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '@/app/public/circular.png'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Menu } from 'lucide-react'
 
 const SideBar = () => {
     const router = useRouter();
+    const { data: session } = useSession();
     const [open, setOpen] = useState(false);
-    const sideBarItems = ["Dashboard", "Sessions", "Volunteers", "Profile"]
+    const sideBarItems = [
+        "Dashboard",
+        "Sessions",
+        "Profile"
+    ];
     
     const handleLogOut = async () => {
         try {
@@ -55,14 +60,18 @@ const SideBar = () => {
                     </div>
                     <span className="font-semibold text-xl text-gray-800">Kalpabriksha</span>
                 </Link>
-                {
-                    sideBarItems.map((items, ellem) => (
-                        <Button onClick={() => { setOpen(false); router.replace(`/${items.toLowerCase()}`) }}
-                        className='bg-transparent text-black outline-none gap-4 border-2 border-blue-200 w-full rounded-full hover:bg-blue-200 m-2' key={ellem}>
-                            {items}
-                        </Button>
-                    ))
-                }
+                {sideBarItems.map((item, idx) => (
+                    <Button onClick={() => { setOpen(false); router.replace(`/${item.toLowerCase()}`) }}
+                        className='bg-transparent text-black outline-none gap-4 border-2 border-blue-200 w-full rounded-full hover:bg-blue-200 m-2' key={idx}>
+                        {item}
+                    </Button>
+                ))}
+                {session?.user?.role === 'Admin' && (
+                    <Button onClick={() => { setOpen(false); router.replace('/volunteers') }}
+                        className='bg-transparent text-black outline-none gap-4 border-2 border-blue-200 w-full rounded-full hover:bg-blue-200 m-2'>
+                        Volunteers
+                    </Button>
+                )}
                 <Button onClick={() => { setOpen(false); handleLogOut(); }} className='bg-red-500 text-white w-full rounded-full m-2 hover:bg-red-700'>Log out</Button>
             </div>
             {/* Overlay for mobile when sidebar is open */}
