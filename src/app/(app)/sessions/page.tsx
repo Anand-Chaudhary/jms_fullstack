@@ -61,7 +61,7 @@ const Sessions = () => {
                 dateOfSession: selectedSession.dateOfSession.split('T')[0],
             });
         }
-    }, [selectedSession]);
+    }, [selectedSession, editForm]);
 
     useEffect(() => {
         const fetchSessions = async () => {
@@ -120,7 +120,7 @@ const Sessions = () => {
             } else {
                 toast.error('Failed to update session');
             }
-        } catch (error) {
+        } catch {
             toast.error('Failed to update session');
         }
     };
