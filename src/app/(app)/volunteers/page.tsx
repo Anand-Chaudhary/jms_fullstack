@@ -242,17 +242,17 @@ const Volunteers = () => {
     };
 
     return (
-        <div className="flex">
-            <div className="navbar p-8 m-4 border-r-2 h-screen border-gray-100">
+        <div className="flex flex-col md:flex-row">
+            <div className="navbar p-2 md:p-8 m-2 md:m-4 border-r-0 md:border-r-2 h-auto md:h-screen border-gray-100">
                 <SideBar />
             </div>
-            <div className="flex-1 p-8">
+            <div className="flex-1 p-2 md:p-8">
+                <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Volunteers</h1>
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">Volunteers</h1>
                     {userRole === 'Admin' && (
                         <Button
                             onClick={() => setIsAddModalOpen(true)}
-                            className="flex items-center space-x-2"
+                            className="flex items-center bg-blue-500 hover:bg-blue-700 space-x-2"
                         >
                             <UserPlus className="h-4 w-4" />
                             <span>Add Member</span>
@@ -415,7 +415,7 @@ const Volunteers = () => {
                         <DialogHeader>
                             <DialogTitle>Add New Member</DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={handleAddMember} className="space-y-4">
+                        <form onSubmit={handleAddMember} className="space-y-5">
                             <div>
                                 <Label htmlFor="username">Name</Label>
                                 <Input
@@ -491,7 +491,7 @@ const Volunteers = () => {
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit">
+                                <Button className='bg-blue-500 hover:bg-blue-700' type="submit">
                                     Add Member
                                 </Button>
                             </DialogFooter>

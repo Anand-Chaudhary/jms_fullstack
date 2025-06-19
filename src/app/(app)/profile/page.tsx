@@ -78,33 +78,31 @@ const Profile = () => {
     };
 
     return (
-        <div className="flex">
-            <div className="navbar p-8 m-4 border-r-2 h-screen border-gray-100">
+        <div className="flex flex-col md:flex-row">
+            <div className="navbar p-2 md:p-8 m-2 md:m-4 border-r-0 md:border-r-2 h-auto md:h-screen border-gray-100">
                 <SideBar />
             </div>
-            <div className="flex-1 p-8">
-                <h1 className="text-2xl font-bold mb-6">Profile</h1>
-                
+            <div className="flex-1 p-2 md:p-8">
+                <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Profile</h1>
                 {loading ? (
-                    <div className="flex items-center justify-center h-64">
+                    <div className="flex items-center justify-center h-40 md:h-64">
                         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
                     </div>
                 ) : profile ? (
                     <div className="max-w-2xl mx-auto">
                         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                             {/* Profile Header */}
-                            <div className="bg-blue-600 px-6 py-8 text-white">
+                            <div className="bg-blue-600 px-4 md:px-6 py-6 md:py-8 text-white">
                                 <div className="flex items-center justify-center mb-4">
-                                    <div className="h-24 w-24 rounded-full bg-white/20 flex items-center justify-center">
-                                        <User className="h-12 w-12 text-white" />
+                                    <div className="h-20 w-20 md:h-24 md:w-24 rounded-full bg-white/20 flex items-center justify-center">
+                                        <User className="h-10 w-10 md:h-12 md:w-12 text-white" />
                                     </div>
                                 </div>
-                                <h2 className="text-2xl font-bold text-center">{profile.username}</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-center">{profile.username}</h2>
                                 <p className="text-center text-blue-100">{profile.role}</p>
                             </div>
-
                             {/* Profile Details */}
-                            <div className="p-6 space-y-4">
+                            <div className="p-4 md:p-6 space-y-4">
                                 <div className="flex items-center space-x-3 text-gray-600">
                                     <Mail className="h-5 w-5 text-blue-500" />
                                     <span>{profile.email}</span>
@@ -122,9 +120,8 @@ const Profile = () => {
                                     <span>{profile.sessionsAttended} sessions attended</span>
                                 </div>
                             </div>
-
                             {/* Stats Section */}
-                            <div className="bg-gray-50 px-6 py-4 border-t">
+                            <div className="bg-gray-50 px-4 md:px-6 py-4 border-t">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="text-center">
                                         <p className="text-sm text-gray-500">Role</p>

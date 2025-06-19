@@ -123,15 +123,14 @@ const Admin = () => {
 
     return (
         <>
-            <div className="main flex">
-                <div className="navbar p-8 m-4 border-r-2 h-screen border-gray-100">
+            <div className="main flex flex-col md:flex-row">
+                <div className="navbar p-2 md:p-8 m-2 md:m-4 border-r-0 md:border-r-2 h-auto md:h-screen border-gray-100">
                     <SideBar />
                 </div>
                 <div className="dashboard w-full">
                     <TopBar />
-                    <div className="p-6">
-                        <h1 className='text-2xl font-semibold mb-6'>Mark Attendance of Volunteers</h1>
-                        
+                    <div className="p-2 md:p-6">
+                        <h1 className='text-xl md:text-2xl font-semibold mb-4 md:mb-6'>Mark Attendance of Volunteers</h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {sessions.map((session) => (
                                 <Dialog 
@@ -159,7 +158,7 @@ const Admin = () => {
                                             </div>
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-3xl">
+                                    <DialogContent className="max-w-3xl w-full overflow-x-auto">
                                         <DialogHeader>
                                             <DialogTitle>Mark Attendance - {session.name}</DialogTitle>
                                         </DialogHeader>

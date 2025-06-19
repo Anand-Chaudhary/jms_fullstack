@@ -86,13 +86,13 @@ const Sessions = () => {
     }
 
     return (
-        <div className="flex">
-            <div className="navbar p-8 m-4 border-r-2 h-screen border-gray-100">
+        <div className="flex flex-col md:flex-row">
+            <div className="navbar p-2 md:p-8 m-2 md:m-4 border-r-0 md:border-r-2 h-auto md:h-screen border-gray-100">
                 <SideBar />
             </div>
-            <div className="flex-1 p-8 m-4">
-                <h1 className="text-3xl m-2 p-2 font-bold mb-6">Sessions</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex-1 p-2 md:p-8 m-2 md:m-4">
+                <h1 className="text-2xl md:text-3xl m-2 p-2 font-bold mb-4 md:mb-6">Sessions</h1>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     {session?.user?.role === 'Admin' && (
                         <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <DialogTrigger asChild>
