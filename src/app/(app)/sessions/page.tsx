@@ -253,7 +253,7 @@ const Sessions = () => {
                                             name="expectedNumberOfStudents"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Expected Number of Students</FormLabel>
+                                                    <FormLabel>Tentative Number of Students</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             type="number"
@@ -310,7 +310,7 @@ const Sessions = () => {
                                     {s.class}
                                 </p>
                                 <p className="flex items-center gap-2">
-                                    <span className="font-medium">Expected Students:</span>
+                                    <span className="font-medium capitalize">tentative number of Students:</span>
                                     {s.expectedNumberOfStudents}
                                 </p>
                             </div>
@@ -347,7 +347,7 @@ const Sessions = () => {
                                         <input className="w-full border rounded px-2 py-1" {...editForm.register('class', { required: true })} />
                                     </div>
                                     <div>
-                                        <label className="block font-medium mb-1">Expected Number of Students</label>
+                                        <label className="block font-medium mb-1">Tentative Number of Students</label>
                                         <input type="number" className="w-full border rounded px-2 py-1" {...editForm.register('expectedNumberOfStudents', { required: true, valueAsNumber: true })} />
                                     </div>
                                     <div>
@@ -366,7 +366,7 @@ const Sessions = () => {
                                         <p><strong>Address:</strong> {selectedSession.address}</p>
                                         <p><strong>Date:</strong> {new Date(selectedSession.dateOfSession).toLocaleDateString()}</p>
                                         <p><strong>Class:</strong> {selectedSession.class}</p>
-                                        <p><strong>Expected Number of Students:</strong> {selectedSession.expectedNumberOfStudents}</p>
+                                        <p><strong>Tentative Number of Students:</strong> {selectedSession.expectedNumberOfStudents}</p>
                                         <p><strong>Remarks:</strong> {selectedSession.remarks && selectedSession.remarks.trim() !== '' ? selectedSession.remarks : 'No remarks given'}</p>
                                     </div>
                                     <Button className="mb-4" onClick={() => setIsEditing(true)}>Edit</Button>
