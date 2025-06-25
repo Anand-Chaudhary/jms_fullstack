@@ -7,10 +7,10 @@ export async function POST(request:Request) {
         const body = await request.json();
         console.log("Received request body:", body);
         
-        const { name, address, dateOfSession, numberOfVolunteer } = body;
+        const { name, address, dateOfSession, numberOfVolunteer, class: className, expectedNumberOfStudents, remarks } = body;
         
         // Validate required fields
-        if (!name || !address || !dateOfSession || numberOfVolunteer === undefined) {
+        if (!name || !address || !dateOfSession || numberOfVolunteer === undefined || !className || expectedNumberOfStudents === undefined) {
             return Response.json({
                 success: false,
                 message: "All fields are required"
@@ -29,6 +29,10 @@ export async function POST(request:Request) {
             name,
             address,
             dateOfSession,
+            numberOfVolunteer,
+            class: className,
+            expectedNumberOfStudents,
+            remarks,
             volunteers: [] // Initialize empty volunteers array
         })
         

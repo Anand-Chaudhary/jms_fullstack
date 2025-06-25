@@ -22,6 +22,9 @@ interface Session {
     dateOfSession: string;
     //eslint-disable-next-line
     volunteers: any[];
+    class: string;
+    expectedNumberOfStudents: number;
+    remarks?: string;
 }
 
 type SchoolFormData = z.infer<typeof SchoolSchema>;
@@ -41,15 +44,21 @@ const Sessions = () => {
             name: '',
             address: '',
             dateOfSession: new Date(),
-            numberOfVolunteer: 0
+            numberOfVolunteer: 0,
+            class: '',
+            expectedNumberOfStudents: 0,
+            remarks: '',
         }
     });
 
-    const editForm = useForm<{ name: string; address: string; dateOfSession: string }>({
+    const editForm = useForm<{ name: string; address: string; dateOfSession: string; class: string; expectedNumberOfStudents: number; remarks?: string }>({
         defaultValues: {
             name: '',
             address: '',
             dateOfSession: '',
+            class: '',
+            expectedNumberOfStudents: 0,
+            remarks: '',
         }
     });
 
@@ -59,6 +68,9 @@ const Sessions = () => {
                 name: selectedSession.name,
                 address: selectedSession.address,
                 dateOfSession: selectedSession.dateOfSession.split('T')[0],
+                class: selectedSession.class || '',
+                expectedNumberOfStudents: selectedSession.expectedNumberOfStudents || 0,
+                remarks: selectedSession.remarks || '',
             });
         }
     }, [selectedSession, editForm]);
@@ -83,7 +95,7 @@ const Sessions = () => {
         try {
             const response = await axios.post('/api/add-session', {
                 ...data,
-                dateOfSession: data.dateOfSession.toISOString()
+                dateOfSession: data.dateOfSession.toISOString(),
             });
             if (response.data.success) {
                 toast.success('Session added successfully');
@@ -103,7 +115,7 @@ const Sessions = () => {
         setIsSessionDetailsOpen(true);
     };
 
-    const handleEditSave = async (data: { name: string; address: string; dateOfSession: string }) => {
+    const handleEditSave = async (data: { name: string; address: string; dateOfSession: string; class: string; expectedNumberOfStudents: number; remarks?: string }) => {
         if (!selectedSession) return;
         try {
             const response = await axios.patch('/api/sessions', {
@@ -111,6 +123,9 @@ const Sessions = () => {
                 name: data.name,
                 address: data.address,
                 dateOfSession: data.dateOfSession,
+                class: data.class,
+                expectedNumberOfStudents: data.expectedNumberOfStudents,
+                remarks: data.remarks,
             });
             if (response.data.success) {
                 toast.success('Session updated successfully');
@@ -144,7 +159,7 @@ const Sessions = () => {
                     {session?.user?.role === 'Admin' && (
                         <Dialog open={isAddSessionOpen} onOpenChange={setIsAddSessionOpen}>
                             <DialogTrigger asChild>
-                                <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer flex flex-col items-center justify-center h-[200px]">
+                                <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer flex flex-col items-center justify-center h-[200px] md:h-full">
                                     <Plus className="h-12 w-12 text-blue-500 mb-2" />
                                     <span className="text-lg font-semibold text-gray-700">Add Session</span>
                                 </div>
@@ -188,8 +203,8 @@ const Sessions = () => {
                                                 <FormItem>
                                                     <FormLabel>Date of Session</FormLabel>
                                                     <FormControl>
-                                                        <Input 
-                                                            type="date" 
+                                                        <Input
+                                                            type="date"
                                                             {...field}
                                                             value={field.value instanceof Date ? field.value.toISOString().split('T')[0] : ''}
                                                             onChange={(e) => field.onChange(new Date(e.target.value))}
@@ -206,12 +221,59 @@ const Sessions = () => {
                                                 <FormItem>
                                                     <FormLabel>Number of Volunteers</FormLabel>
                                                     <FormControl>
-                                                        <Input 
-                                                            type="number" 
-                                                            placeholder="Enter number of volunteers" 
+                                                        <Input
+                                                            type="number"
+                                                            placeholder="Enter number of volunteers"
                                                             {...field}
                                                             onChange={(e) => field.onChange(parseInt(e.target.value))}
                                                         />
+
+
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name="class"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Class</FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="Enter class" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name="expectedNumberOfStudents"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Expected Number of Students</FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type="number"
+                                                            placeholder="Enter expected number of students"
+                                                            {...field}
+                                                            onChange={(e) => field.onChange(parseInt(e.target.value))}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name="remarks"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Remarks</FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="Enter remarks (optional)" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -243,6 +305,14 @@ const Sessions = () => {
                                     <span className="font-medium">Volunteers:</span>
                                     {s.volunteers ? s.volunteers.length : 0}
                                 </p>
+                                <p className="flex items-center gap-2">
+                                    <span className="font-medium">Class:</span>
+                                    {s.class}
+                                </p>
+                                <p className="flex items-center gap-2">
+                                    <span className="font-medium">Expected Students:</span>
+                                    {s.expectedNumberOfStudents}
+                                </p>
                             </div>
                         </div>
                     ))}
@@ -272,6 +342,18 @@ const Sessions = () => {
                                         <label className="block font-medium mb-1">Date</label>
                                         <input type="date" className="w-full border rounded px-2 py-1" {...editForm.register('dateOfSession', { required: true })} />
                                     </div>
+                                    <div>
+                                        <label className="block font-medium mb-1">Class</label>
+                                        <input className="w-full border rounded px-2 py-1" {...editForm.register('class', { required: true })} />
+                                    </div>
+                                    <div>
+                                        <label className="block font-medium mb-1">Expected Number of Students</label>
+                                        <input type="number" className="w-full border rounded px-2 py-1" {...editForm.register('expectedNumberOfStudents', { required: true, valueAsNumber: true })} />
+                                    </div>
+                                    <div>
+                                        <label className="block font-medium mb-1">Remarks</label>
+                                        <input className="w-full border rounded px-2 py-1" {...editForm.register('remarks')} />
+                                    </div>
                                     <div className="flex gap-2 justify-end">
                                         <Button type="button" variant="secondary" onClick={() => setIsEditing(false)}>Cancel</Button>
                                         <Button type="submit" className="bg-blue-500 hover:bg-blue-700">Save</Button>
@@ -283,6 +365,9 @@ const Sessions = () => {
                                         <p><strong>School Name:</strong> {selectedSession.name}</p>
                                         <p><strong>Address:</strong> {selectedSession.address}</p>
                                         <p><strong>Date:</strong> {new Date(selectedSession.dateOfSession).toLocaleDateString()}</p>
+                                        <p><strong>Class:</strong> {selectedSession.class}</p>
+                                        <p><strong>Expected Number of Students:</strong> {selectedSession.expectedNumberOfStudents}</p>
+                                        <p><strong>Remarks:</strong> {selectedSession.remarks && selectedSession.remarks.trim() !== '' ? selectedSession.remarks : 'No remarks given'}</p>
                                     </div>
                                     <Button className="mb-4" onClick={() => setIsEditing(true)}>Edit</Button>
                                     <div>

@@ -9,6 +9,8 @@ export interface School extends Document{
         isPresent: boolean,
         isAvailable: boolean
     }[],
+    class: string,
+    expectedNumberOfStudents: number,
     remarks?: string
 }
 
@@ -24,6 +26,17 @@ const SchoolSchema: Schema<School> = new Schema({
     dateOfSession: {
         type: Date,
         required: [true, "Date of session is required"],
+    },
+    class:{
+        type: String,
+        required: [true, "Class is required"],
+    },
+    expectedNumberOfStudents: {
+        type: Number,
+        required: [true, "Expected number of students is required"],
+    },
+    remarks: {
+        type: String,
     },
     volunteers:[
         {

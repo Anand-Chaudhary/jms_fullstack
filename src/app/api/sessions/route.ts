@@ -40,7 +40,7 @@ export async function PATCH(request: Request) {
 
         await dbConnect();
         const body = await request.json();
-        const { id, name, address, dateOfSession } = body;
+        const { id, name, address, dateOfSession, class: className, expectedNumberOfStudents, remarks } = body;
         if (!id) {
             return NextResponse.json({ error: "Session ID is required" }, { status: 400 });
         }
@@ -51,6 +51,9 @@ export async function PATCH(request: Request) {
                 ...(name && { name }),
                 ...(address && { address }),
                 ...(dateOfSession && { dateOfSession }),
+                ...(className && { class: className }),
+                ...(expectedNumberOfStudents !== undefined && { expectedNumberOfStudents }),
+                ...(remarks !== undefined && { remarks }),
             },
             { new: true }
         );

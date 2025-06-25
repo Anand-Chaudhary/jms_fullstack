@@ -158,8 +158,8 @@ const Volunteers = () => {
             const { data } = await axios.put(`/api/volunteers/${selectedVolunteer._id}`, editFormData);
 
             if (data.success) {
-                setVolunteers(volunteers.map(v => 
-                    v._id === selectedVolunteer._id 
+                setVolunteers(volunteers.map(v =>
+                    v._id === selectedVolunteer._id
                         ? { ...v, ...editFormData }
                         : v
                 ));
@@ -247,19 +247,20 @@ const Volunteers = () => {
                 <SideBar />
             </div>
             <div className="flex-1 p-2 md:p-8">
-                <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Volunteers</h1>
-                <div className="flex justify-between items-center mb-6">
-                    {userRole === 'Admin' && (
-                        <Button
-                            onClick={() => setIsAddModalOpen(true)}
-                            className="flex items-center bg-blue-500 hover:bg-blue-700 space-x-2"
-                        >
-                            <UserPlus className="h-4 w-4" />
-                            <span>Add Member</span>
-                        </Button>
-                    )}
+                <div className='flex justify-between items-center'>
+                    <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Volunteers</h1>
+                    <div className="flex justify-between items-center mb-6">
+                        {userRole === 'Admin' && (
+                            <Button
+                                onClick={() => setIsAddModalOpen(true)}
+                                className="flex items-center bg-blue-500 hover:bg-blue-700 space-x-2"
+                            >
+                                <UserPlus className="h-4 w-4" />
+                                <span>Add Member</span>
+                            </Button>
+                        )}
+                    </div>
                 </div>
-                
                 {loading ? (
                     <div className="flex items-center justify-center h-64">
                         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
